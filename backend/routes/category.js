@@ -1,57 +1,95 @@
 const express = require("express");
 const router = express.Router();
-const Category = require("../db/category");
+const {
+  addCategory,
+  updateCategory,
+  deleteCategory,
+  getAllCateogories,
+} = require("../handlers/category-handler");
 
 /**
- * @swagger
- * tags:
- *   name: Categorias
- *   description: Endpoints para gerenciamento de categorias
- */
-
-/**
- * @swagger
- * /api/categories:
- *   post:
- *     summary: Cria uma nova categoria
- *     tags: [Categorias]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *                 example: categoria
- *     responses:
- *       201:
- *         description: Categoria criada com sucesso
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 _id:
- *                   type: string
- *                   example: 645f1c1d7d3f4b3c7a1e5a4f
- *                 name:
- *                   type: string
- *                   example: categoria
- *       500:
- *         description: Erro no servidor
+ * POST /api/categories
+ * @summary Cria uma nova categoria
+ * @tags Categorias
+ * @param {object} request.body.required - Dados da categoria
+ * @param {string} request.body.name - Nome da categoria
+ * @response 200 - Sucesso ao criar categoria
+ * @responseContent {object} 200.application/json
+ * @response 500 - Erro ao criar categoria
  */
 router.post("", async (req, res) => {
   try {
-    category = req.body;
-    let category = new Category({ name: category.name });
-    await category.save();
-    return category.toObject();
-    // return res.status(201).json(savedCategory);
+    let model = req.body;
+    await addCategory(model);
+    return res.status(200).json({ message: "criado" });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Erro ao criar categoria" });
+  }
+});
+
+/**
+ * GET /api/categories
+ * @summary Retorna todas as categorias
+ * @tags Categorias
+ * @response 200 - Lista de categorias obtida com sucesso
+ * @responseContent {array<object>} 200.application/json
+ * @response 500 - Erro ao buscar categorias
+ */
+router.get("", async (req, res) => {
+  try {
+    const categories = await getAllCateogories();
+    return res.status(200).json(categories);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Erro ao buscar categorias" });
+  }
+});
+
+/**
+ * PUT /api/categories/{id}
+ * @summary Atualiza uma categoria existente
+ * @tags Categorias
+ * @param {string} id.path.required - ID da categoria
+ * @param {object} request.body.required - Dados para atualização
+ * @param {string} request.body.name - Novo nome da categoria
+ * @response 200 - Categoria atualizada com sucesso
+ * @responseContent {object} 200.application/json
+ * @response 500 - Erro ao atualizar categoria
+ */
+router.put("/:id", async (req, res) => {
+  try {
+    const model = req.body;
+    const id = req.params.id;
+
+    await updateCategory(id, model);
+
+    return res.status(200).json({ message: "atualizado" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Erro ao atualizar a categoria" });
+  }
+});
+
+/**
+ * DELETE /api/categories/{id}
+ * @summary Deleta uma categoria
+ * @tags Categorias
+ * @param {string} id.path.required - ID da categoria
+ * @response 200 - Categoria deletada com sucesso
+ * @responseContent {object} 200.application/json
+ * @response 500 - Erro ao deletar categoria
+ */
+router.delete("/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    await deleteCategory(id);
+
+    return res.status(200).json({ message: "deletado" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Erro ao deletar a categoria" });
   }
 });
 

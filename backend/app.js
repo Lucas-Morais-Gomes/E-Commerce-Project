@@ -1,35 +1,35 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const swaggerJsDoc = require("swagger-jsdoc");
-const swaggerUi = require("swagger-ui-express");
+const expressJSDocSwagger = require("express-jsdoc-swagger");
 const app = express();
 const PORT = 3000;
-
+const cors = require("cors");
 const categoryRoutes = require("./routes/category");
 
-// Middleware para interpretar JSON
+app.use(cors());
 app.use(express.json());
 
-// Configuração do Swagger
-const swaggerOptions = {
-  definition: {
-    openapi: "3.0.0",
-    info: {
-      title: "E-Commerce Store API",
-      version: "1.0.0",
-      description: "API para gerenciamento de uma loja virtual",
-    },
-    servers: [
-      {
-        url: "http://localhost:3000",
-      },
-    ],
+// Configuração do express-jsdoc-swagger
+const options = {
+  info: {
+    title: "E-Commerce Store API",
+    version: "1.0.0",
+    description: "API para gerenciamento de uma loja virtual",
   },
-  apis: ["./routes/*.js"],
+  servers: [
+    {
+      url: "http://localhost:3000",
+    },
+  ],
+  baseDir: __dirname,
+  filesPattern: "./routes/*.js",
+  swaggerUIPath: "/api-docs",
+  exposeSwaggerUI: true,
+  exposeApiDocs: false,
+  apiDocsPath: "/v3/api-docs",
 };
 
-const swaggerDocs = swaggerJsDoc(swaggerOptions);
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+expressJSDocSwagger(app)(options);
 
 // Rota de teste
 app.get("/", (req, res) => {
