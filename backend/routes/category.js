@@ -4,7 +4,8 @@ const {
   addCategory,
   updateCategory,
   deleteCategory,
-  getAllCateogories,
+  getAllCategories,
+  getCategoryByID,
 } = require("../handlers/category-handler");
 
 /**
@@ -38,8 +39,28 @@ router.post("", async (req, res) => {
  */
 router.get("", async (req, res) => {
   try {
-    const categories = await getAllCateogories();
+    const categories = await getAllCategories();
     return res.status(200).json(categories);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Erro ao buscar categorias" });
+  }
+});
+
+/**
+ * GET /api/categories/{id}
+ * @summary Procura uma categoria existente
+ * @tags Categorias
+ * @param {string} id.path.required - ID da categoria
+ * @response 200 - Categoria encontrada com sucesso
+ * @responseContent {object} 200.application/json
+ * @response 500 - Erro ao encontrar categoria
+ */
+router.get("/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const category = await getCategoryByID(id);
+    return res.status(200).json(category);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Erro ao buscar categorias" });
