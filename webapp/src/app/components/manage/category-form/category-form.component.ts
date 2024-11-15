@@ -25,7 +25,7 @@ export class CategoryFormComponent {
     console.log(this.id);
     if (this.id) {
       this.isEdit = true;
-      this.categoryService.getCategoryByID(this.id).subscribe((result: any) => {
+      this.categoryService.getCategoryByID(this.id).subscribe((result) => {
         console.log(result);
         this.name = result.name;
       });
@@ -34,7 +34,7 @@ export class CategoryFormComponent {
 
   add() {
     console.log(this.name);
-    this.categoryService.addCategory(this.name).subscribe((result: any) => {
+    this.categoryService.addCategory(this.name).subscribe((result) => {
       alert('Categoria Criada');
       this.router.navigateByUrl('/admin/categories');
       console.log(result);
@@ -44,7 +44,7 @@ export class CategoryFormComponent {
   update() {
     this.categoryService
       .updateCategory(this.id, this.name)
-      .subscribe((result: any) => {
+      .subscribe((result) => {
         alert('Categoria Atualizada');
         this.router.navigateByUrl('/admin/categories');
         console.log(result);

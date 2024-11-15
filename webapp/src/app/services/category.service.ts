@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { Category } from '../types/category';
 
 @Injectable({
   providedIn: 'root',
@@ -11,11 +12,11 @@ export class CategoryService {
   constructor() {}
 
   getAllCategories() {
-    return this.http.get(this.apiUrl);
+    return this.http.get<Category[]>(this.apiUrl);
   }
 
   getCategoryByID(id: string) {
-    return this.http.get(this.apiUrl + id);
+    return this.http.get<Category>(this.apiUrl + id);
   }
 
   DeleteCategoryByID(id: string) {
