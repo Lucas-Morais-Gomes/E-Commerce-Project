@@ -27,6 +27,7 @@ import { RouterLink } from '@angular/router';
 export class CategoriesComponent {
   displayedColumns: string[] = ['id', 'name', 'action'];
   dataSource: MatTableDataSource<any>;
+  id!: string;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -38,6 +39,10 @@ export class CategoriesComponent {
   }
 
   ngOnInit() {
+    this.getServerData();
+  }
+
+  private getServerData() {
     this.categoryService.getAllCategories().subscribe((result: any) => {
       console.log(result);
       this.dataSource.data = result;
@@ -56,5 +61,13 @@ export class CategoriesComponent {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  delete(id: string) {
+    this.categoryService.DeleteCategoryByID(id).subscribe((result: any) => {
+      alert('Categoria Deletada');
+      console.log(result);
+      this.getServerData();
+    });
   }
 }
