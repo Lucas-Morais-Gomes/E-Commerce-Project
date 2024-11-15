@@ -15,14 +15,20 @@ async function deleteCategory(id) {
   await Category.findOneAndDelete({ _id: id });
 }
 
-async function getAllCateogories() {
+async function getAllCategories() {
   let categories = await Category.find();
   return categories.map((c) => c.toObject());
+}
+
+async function getCategoryByID(id) {
+  let category = await Category.findById(id);
+  return category.toObject();
 }
 
 module.exports = {
   addCategory,
   updateCategory,
   deleteCategory,
-  getAllCateogories,
+  getAllCategories,
+  getCategoryByID,
 };
