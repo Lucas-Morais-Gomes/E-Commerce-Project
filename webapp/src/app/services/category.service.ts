@@ -1,12 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Category } from '../types/category';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CategoryService {
-  private readonly apiUrl = 'http://localhost:3000/api/categories/';
+  private readonly apiUrl = environment.apiUrl + '/api/categories/';
   http = inject(HttpClient);
 
   constructor() {}
@@ -19,7 +20,7 @@ export class CategoryService {
     return this.http.get<Category>(this.apiUrl + id);
   }
 
-  DeleteCategoryByID(id: string) {
+  deleteCategory(id: string) {
     return this.http.delete(this.apiUrl + id);
   }
 

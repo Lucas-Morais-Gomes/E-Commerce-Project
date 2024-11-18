@@ -5,13 +5,13 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { CategoryService } from '../../../services/category.service';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
-import { Category } from '../../../types/category';
+import { Brand } from '../../../types/brand';
+import { BrandService } from '../../../services/brand.service';
 
 @Component({
-  selector: 'app-categories',
+  selector: 'app-brands',
   standalone: true,
   imports: [
     MatFormFieldModule,
@@ -22,18 +22,18 @@ import { Category } from '../../../types/category';
     MatButtonModule,
     RouterLink,
   ],
-  templateUrl: './categories.component.html',
-  styleUrl: './categories.component.scss',
+  templateUrl: './brands.component.html',
+  styleUrl: './brands.component.scss',
 })
-export class CategoriesComponent {
+export class BrandsComponent {
   displayedColumns: string[] = ['id', 'name', 'action'];
-  dataSource: MatTableDataSource<Category>;
+  dataSource: MatTableDataSource<Brand>;
   id!: string;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  categoryService = inject(CategoryService);
+  brandService = inject(BrandService);
 
   constructor() {
     this.dataSource = new MatTableDataSource([] as any);
@@ -44,7 +44,7 @@ export class CategoriesComponent {
   }
 
   private getServerData() {
-    this.categoryService.getAllCategories().subscribe((result) => {
+    this.brandService.getAllBrands().subscribe((result) => {
       console.log(result);
       this.dataSource.data = result;
     });
@@ -65,8 +65,8 @@ export class CategoriesComponent {
   }
 
   delete(id: string) {
-    this.categoryService.deleteCategory(id).subscribe((result) => {
-      alert('Categoria Deletada');
+    this.brandService.deleteBrand(id).subscribe((result) => {
+      alert('Marca Deletada');
       console.log(result);
       this.getServerData();
     });

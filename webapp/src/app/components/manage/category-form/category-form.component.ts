@@ -13,16 +13,15 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrl: './category-form.component.scss',
 })
 export class CategoryFormComponent {
-  name!: string;
   categoryService = inject(CategoryService);
   router = inject(Router);
   route = inject(ActivatedRoute);
   isEdit = false;
   id!: string;
+  name!: string;
 
   ngOnInit() {
     this.id = this.route.snapshot.params['id'];
-    console.log(this.id);
     if (this.id) {
       this.isEdit = true;
       this.categoryService.getCategoryByID(this.id).subscribe((result) => {
@@ -33,7 +32,6 @@ export class CategoryFormComponent {
   }
 
   add() {
-    console.log(this.name);
     this.categoryService.addCategory(this.name).subscribe((result) => {
       alert('Categoria Criada');
       this.router.navigateByUrl('/admin/categories');
