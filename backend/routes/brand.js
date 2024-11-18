@@ -4,13 +4,14 @@ const {
   updateBrand,
   deleteBrand,
   getBrandByID,
+  getAllBrands,
 } = require("../handlers/brand-handler");
 const router = express.Router();
 
 /**
- * POST /api/products
+ * POST /api/brands
  * @summary Cria uma nova marca
- * @tags Produtos
+ * @tags Marcas
  * @param {object} request.body.required - Dados da marca
  * @param {string} request.body.name - Nome da marca
  * @response 200 - Marca criada com sucesso
@@ -28,9 +29,9 @@ router.post("", async (req, res) => {
 });
 
 /**
- * PUT /api/products/{id}
+ * PUT /api/brands/{id}
  * @summary Atualiza uma marca existente
- * @tags Produtos
+ * @tags Marcas
  * @param {string} id.path.required - ID da marca a ser atualizada
  * @param {object} request.body.required - Dados da marca
  * @param {string} request.body.name - Novo nome da marca
@@ -50,9 +51,9 @@ router.put("/:id", async (req, res) => {
 });
 
 /**
- * DELETE /api/products/{id}
+ * DELETE /api/brands/{id}
  * @summary Deleta uma marca existente
- * @tags Produtos
+ * @tags Marcas
  * @param {string} id.path.required - ID da marca a ser deletada
  * @response 200 - Marca deletada com sucesso
  * @response 500 - Erro ao deletar a marca
@@ -69,9 +70,9 @@ router.delete("/:id", async (req, res) => {
 });
 
 /**
- * GET /api/products/{id}
+ * GET /api/brands/{id}
  * @summary Retorna uma marca pelo ID
- * @tags Produtos
+ * @tags Marcas
  * @param {string} id.path.required - ID da marca
  * @response 200 - Marca encontrada com sucesso
  * @response 404 - Marca não encontrada
@@ -90,6 +91,30 @@ router.get("/:id", async (req, res) => {
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Erro ao encontrar marca" });
+  }
+});
+
+/**
+ * GET /api/brands
+ * @summary Retorna todas as marcas
+ * @tags Marcas
+ * @response 200 - Lista de marcas obtida com sucesso
+ * @responseContent {Array<object>} 200.application/json
+ * @response 500 - Erro ao buscar marcas
+ */
+router.get("", async (req, res) => {
+  try {
+    let brands = await getAllBrands();
+
+    // Verifica se há marcas disponíveis
+    if (brands.length === 0) {
+      return res.status(404).json({ message: "Nenhuma marca encontrada" });
+    }
+
+    return res.status(200).json(brands);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Erro ao buscar marcas" });
   }
 });
 

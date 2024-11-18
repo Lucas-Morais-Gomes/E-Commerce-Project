@@ -5,7 +5,7 @@ const app = express();
 const PORT = 3000;
 const cors = require("cors");
 const categoryRoutes = require("./routes/category");
-const productRoutes = require("./routes/product");
+const brandRoutes = require("./routes/brand");
 
 app.use(cors());
 app.use(express.json());
@@ -39,7 +39,7 @@ app.get("/", (req, res) => {
 
 // Usar rotas
 app.use("/api/categories", categoryRoutes);
-app.use("/api/products", productRoutes);
+app.use("/api/brands", brandRoutes);
 
 // Conectar ao MongoDB
 async function connectDb() {
